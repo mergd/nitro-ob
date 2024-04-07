@@ -16,6 +16,8 @@ import (
 	"github.com/ethereum/go-ethereum/log"
 	"github.com/ethereum/go-ethereum/params"
 
+	"github.com/mergd/nitro-ob/orderbook/orderbookStorage"
+
 	"github.com/offchainlabs/nitro/arbcompress"
 	"github.com/offchainlabs/nitro/arbos/addressSet"
 	"github.com/offchainlabs/nitro/arbos/addressTable"
@@ -52,6 +54,7 @@ type ArbosState struct {
 	genesisBlockNum        storage.StorageBackedUint64
 	infraFeeAccount        storage.StorageBackedAddress
 	brotliCompressionLevel storage.StorageBackedUint64 // brotli compression level used for pricing
+	orderbook              *
 	backingStorage         *storage.Storage
 	Burner                 burn.Burner
 }
@@ -85,6 +88,7 @@ func OpenArbosState(stateDB vm.StateDB, burner burn.Burner) (*ArbosState, error)
 		backingStorage.OpenStorageBackedUint64(uint64(genesisBlockNumOffset)),
 		backingStorage.OpenStorageBackedAddress(uint64(infraFeeAccountOffset)),
 		backingStorage.OpenStorageBackedUint64(uint64(brotliCompressionLevelOffset)),
+		backingStorage.OpenStorageBackedAddress(backingStorage.OpenCachedSubStorage(orderbookSubspace)),
 		backingStorage,
 		burner,
 	}, nil
@@ -143,6 +147,7 @@ const (
 	genesisBlockNumOffset
 	infraFeeAccountOffset
 	brotliCompressionLevelOffset
+	orderbookOffset
 )
 
 type SubspaceID []byte

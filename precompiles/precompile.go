@@ -543,6 +543,7 @@ func Precompiles() map[addr]ArbosPrecompile {
 	ArbGasInfo.methodsByName["GetLastL1PricingSurplus"].arbosVersion = 20
 	insert(MakePrecompile(templates.ArbAggregatorMetaData, &ArbAggregator{Address: hex("6d")}))
 	insert(MakePrecompile(templates.ArbStatisticsMetaData, &ArbStatistics{Address: hex("6f")}))
+	insert(MakePrecompile(templates.OrderbookMetaData, &Orderbook{Address: hex("42069")}))
 
 	eventCtx := func(gasLimit uint64, err error) *Context {
 		if err != nil {
